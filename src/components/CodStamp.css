@@ -1,0 +1,50 @@
+.cod-stamp {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  color: var(--rouge-algerie);
+  transform: rotate(-9deg);
+  flex-shrink: 0;
+}
+
+.cod-stamp--s {
+  width: 72px;
+  height: 72px;
+}
+
+.cod-stamp__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+}
+
+.cod-stamp__text {
+  position: relative;
+  text-align: center;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 0.58rem;
+  letter-spacing: 0.03em;
+  line-height: 1.35;
+  padding: 0 12px;
+}
+
+.cod-stamp--s .cod-stamp__text {
+  font-size: 0.46rem;
+  padding: 0 8px;
+}
+
+.cod-stamp__text strong {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+.cod-stamp--s .cod-stamp__text strong {
+  font-size: 0.56rem;
+}

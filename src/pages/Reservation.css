@@ -1,0 +1,149 @@
+.reservation-empty {
+  text-align: center;
+  padding: 100px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.reservation__grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.reservation-form h1 {
+  font-size: clamp(1.8rem, 2.8vw, 2.3rem);
+  margin-top: 10px;
+}
+
+.reservation-form__lead {
+  margin-top: 14px;
+  max-width: 480px;
+}
+
+.field {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vert-encre);
+}
+
+.field input,
+.field select,
+.field textarea {
+  border: 1.5px solid var(--gris-perle);
+  border-radius: var(--radius-s);
+  padding: 13px 14px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  background: var(--blanc);
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--vert-vif);
+}
+
+.field__error {
+  color: var(--rouge-algerie);
+  font-size: 0.78rem;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.reservation-form__submit {
+  margin-top: 32px;
+  width: 100%;
+  padding: 16px;
+  font-size: 1rem;
+}
+
+.reservation-summary {
+  background: var(--blanc);
+  border-radius: var(--radius-m);
+  padding: 30px 26px;
+  box-shadow: var(--shadow-card);
+  position: sticky;
+  top: 110px;
+}
+
+.reservation-summary h3 {
+  font-size: 1.2rem;
+  margin-top: 6px;
+  margin-bottom: 22px;
+}
+
+.reservation-summary ul {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reservation-summary li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.86rem;
+  gap: 10px;
+}
+
+.reservation-summary li span:first-child {
+  color: var(--gris-texte);
+}
+
+.reservation-summary li span:last-child {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.reservation-summary .ticket-perforation {
+  border-top: 2px dashed var(--gris-perle);
+  margin: 20px 0;
+}
+
+.reservation-summary__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+}
+
+.reservation-summary__total span {
+  font-size: 0.82rem;
+  color: var(--gris-texte);
+}
+
+.reservation-summary__total strong {
+  font-size: 1.4rem;
+  color: var(--vert-encre);
+}
+
+@media (max-width: 900px) {
+  .reservation__grid {
+    grid-template-columns: 1fr;
+  }
+  .reservation-summary {
+    position: static;
+    order: -1;
+  }
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
