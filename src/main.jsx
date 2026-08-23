@@ -4,13 +4,16 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import { ReservationProvider } from "./context/ReservationContext.jsx";
+import { LanguageProvider } from "./context/LanguageContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <ReservationProvider>
-        <App />
-      </ReservationProvider>
+      <LanguageProvider>
+        <ReservationProvider>
+          <App />
+        </ReservationProvider>
+      </LanguageProvider>
     </BrowserRouter>
   </StrictMode>
 );

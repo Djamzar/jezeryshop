@@ -1,0 +1,157 @@
+.phero {
+  padding: 56px 0 40px;
+  overflow: hidden;
+}
+
+.phero__grid {
+  display: grid;
+  grid-template-columns: 1fr 0.95fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.phero__copy h1 {
+  font-size: clamp(2.3rem, 4.2vw, 3.4rem);
+  margin-top: 14px;
+  color: var(--vert-nuit);
+}
+
+.phero__accent {
+  color: var(--rouge-algerie);
+}
+
+.phero__lead {
+  margin-top: 20px;
+  max-width: 460px;
+  font-size: 1.05rem;
+}
+
+.phero__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-top: 28px;
+  font-family: var(--font-mono);
+}
+
+.phero__price {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--vert-encre);
+}
+
+.phero__price-note {
+  font-size: 0.76rem;
+  color: var(--gris-texte);
+  max-width: 160px;
+}
+
+.phero__reserve {
+  display: flex;
+  gap: 14px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.qty-picker {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1.5px solid var(--gris-perle);
+  border-radius: var(--radius-s);
+  padding: 4px 16px;
+  background: var(--blanc);
+}
+
+.qty-picker button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: var(--vert-nuit);
+  width: 24px;
+}
+
+.qty-picker span {
+  font-family: var(--font-mono);
+  min-width: 20px;
+  text-align: center;
+}
+
+.phero__cta {
+  flex: 1;
+  min-width: 240px;
+  padding: 16px 26px;
+  font-size: 1rem;
+}
+
+.phero__trust {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px dashed var(--gris-perle);
+}
+
+.phero__trust li {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--vert-encre);
+  position: relative;
+  padding-left: 16px;
+}
+
+.phero__trust li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--vert-vif);
+}
+
+.phero__showcase {
+  position: relative;
+}
+
+.phero__frame {
+  border-radius: var(--radius-l);
+  overflow: hidden;
+  box-shadow: var(--shadow-lift);
+  transform: rotate(1.5deg);
+  background: var(--papier-fonce);
+}
+
+.phero__frame img {
+  width: 100%;
+  aspect-ratio: 4/3.4;
+  object-fit: cover;
+}
+
+.phero__stamp {
+  position: absolute;
+  bottom: -26px;
+  left: -26px;
+  background: var(--papier);
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: var(--shadow-lift);
+}
+
+@media (max-width: 940px) {
+  .phero__grid {
+    grid-template-columns: 1fr;
+  }
+  .phero__showcase {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .phero__stamp {
+    display: none;
+  }
+}

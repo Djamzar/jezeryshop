@@ -1,80 +1,45 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { product } from "../data/product";
 
 const ReservationContext = createContext(null);
-const STORAGE_KEY = "jezeryshop_reservation";
+const STORAGE_KEY = "jezeryshop_reservation_qty";
 
 export function ReservationProvider({ children }) {
-  const [items, setItems] = useState(() => {
+  const [quantity, setQuantity] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
+      const parsed = saved ? parseInt(saved, 10) : 0;
+      return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
     } catch {
-      return [];
+      return 0;
     }
   });
   const [isTicketOpen, setTicketOpen] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
+    localStorage.setItem(STORAGE_KEY, String(quantity));
+  }, [quantity]);
 
-  function addItem(product, quantity = 1) {
-    setItems((prev) => {
-      const existing = prev.find((i) => i.id === product.id);
-      const maxQty = product.stock ?? 99;
-      if (existing) {
-        return prev.map((i) =>
-          i.id === product.id
-            ? { ...i, quantity: Math.min(i.quantity + quantity, maxQty) }
-            : i
-        );
-      }
-      return [
-        ...prev,
-        {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          quantity: Math.min(quantity, maxQty),
-        },
-      ];
-    });
+  function addQuantity(amount = 1) {
+    setQuantity((q) => Math.max(0, q + amount));
     setTicketOpen(true);
   }
 
-  function updateQuantity(id, quantity) {
-    setItems((prev) =>
-      prev
-        .map((i) => (i.id === id ? { ...i, quantity } : i))
-        .filter((i) => i.quantity > 0)
-    );
-  }
-
-  function removeItem(id) {
-    setItems((prev) => prev.filter((i) => i.id !== id));
+  function setExactQuantity(value) {
+    setQuantity(Math.max(0, value));
   }
 
   function clearReservation() {
-    setItems([]);
+    setQuantity(0);
   }
 
-  const totalItems = useMemo(
-    () => items.reduce((sum, i) => sum + i.quantity, 0),
-    [items]
-  );
-  const totalPrice = useMemo(
-    () => items.reduce((sum, i) => sum + i.quantity * i.price, 0),
-    [items]
-  );
+  const totalPrice = quantity * product.price;
 
   const value = {
-    items,
-    addItem,
-    updateQuantity,
-    removeItem,
+    quantity,
+    addQuantity,
+    setExactQuantity,
     clearReservation,
-    totalItems,
     totalPrice,
     isTicketOpen,
     setTicketOpen,

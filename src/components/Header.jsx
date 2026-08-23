@@ -1,18 +1,21 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useReservation } from "../context/ReservationContext";
+import { useLanguage } from "../context/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 import logo from "../assets/logo.png";
 import "./Header.css";
 
 export default function Header() {
-  const { totalItems, setTicketOpen } = useReservation();
+  const { quantity, setTicketOpen } = useReservation();
+  const { dict } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const links = [
-    { to: "/", label: "Accueil", end: true },
-    { to: "/boutique", label: "Boutique" },
-    { to: "/#comment-ca-marche", label: "Comment ça marche" },
-    { to: "/contact", label: "Contact" },
+    { href: "/#kit", label: dict.nav.kit },
+    { href: "/#pourquoi", label: dict.nav.pourquoi },
+    { href: "/#comment-ca-marche", label: dict.nav.comment },
+    { href: "/#faq", label: dict.nav.faq },
   ];
 
   return (
@@ -24,26 +27,20 @@ export default function Header() {
 
         <nav className={`site-header__nav ${menuOpen ? "is-open" : ""}`}>
           {links.map((link) => (
-            <NavLink
-              key={link.label}
-              to={link.to}
-              end={link.end}
-              onClick={() => setMenuOpen(false)}
-              className={({ isActive }) =>
-                isActive ? "is-active" : undefined
-              }
-            >
+            <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>
               {link.label}
-            </NavLink>
+            </a>
           ))}
         </nav>
 
         <div className="site-header__actions">
+          <LanguageSwitcher />
+
           <button
             type="button"
             className="ticket-btn"
             onClick={() => setTicketOpen(true)}
-            aria-label="Ouvrir mon bon de réservation"
+            aria-label={dict.header.ticketBtn}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
@@ -59,15 +56,15 @@ export default function Header() {
                 strokeLinecap="round"
               />
             </svg>
-            <span>Mon bon</span>
-            {totalItems > 0 && <span className="ticket-btn__count">{totalItems}</span>}
+            <span>{dict.header.ticketBtn}</span>
+            {quantity > 0 && <span className="ticket-btn__count">{quantity}</span>}
           </button>
 
           <button
             type="button"
             className="burger"
             onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Ouvrir le menu"
+            aria-label="Menu"
             aria-expanded={menuOpen}
           >
             <span />

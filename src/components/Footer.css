@@ -55,10 +55,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
   padding: 18px 24px;
   font-size: 0.82rem;
   color: #7f9789;
   font-family: var(--font-mono);
+}
+
+.site-footer__legal {
+  color: #9fb5a9;
+  text-decoration: underline;
+}
+
+.site-footer__legal:hover {
+  color: white;
 }
 
 .site-footer__flag {

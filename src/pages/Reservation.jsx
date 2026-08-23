@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useReservation } from "../context/ReservationContext";
+import { useLanguage } from "../context/LanguageContext";
+import { product } from "../data/product";
 import { wilayas } from "../data/wilayas";
+import { wilayasAr } from "../data/wilayasAr";
 import "./Reservation.css";
 
-function formatPrice(value) {
-  return new Intl.NumberFormat("fr-DZ").format(value) + " DA";
-}
-
 export default function Reservation() {
-  const { items, totalPrice, clearReservation } = useReservation();
+  const { quantity, totalPrice, clearReservation } = useReservation();
+  const { dict, lang } = useLanguage();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     nom: "",
@@ -20,24 +20,29 @@ export default function Reservation() {
   });
   const [errors, setErrors] = useState({});
 
+  const wilayaOptions = wilayas.map((w, i) => ({
+    value: w,
+    label: lang === "dz" ? wilayasAr[i] : w,
+  }));
+
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
   }
 
   function validate() {
     const next = {};
-    if (!form.nom.trim()) next.nom = "Le nom est requis.";
+    if (!form.nom.trim()) next.nom = dict.reservation.errors.nom;
     if (!/^0[5-7][0-9]{8}$/.test(form.telephone.replace(/\s/g, "")))
-      next.telephone = "Numéro invalide (ex : 0555 12 34 56).";
-    if (!form.wilaya) next.wilaya = "Choisissez votre wilaya.";
-    if (!form.adresse.trim()) next.adresse = "L'adresse est requise.";
+      next.telephone = dict.reservation.errors.telephone;
+    if (!form.wilaya) next.wilaya = dict.reservation.errors.wilaya;
+    if (!form.adresse.trim()) next.adresse = dict.reservation.errors.adresse;
     setErrors(next);
     return Object.keys(next).length === 0;
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (items.length === 0) return;
+    if (quantity === 0) return;
     if (!validate()) return;
 
     const orderNumber = `JZ-${Date.now().toString().slice(-6)}`;
@@ -45,70 +50,69 @@ export default function Reservation() {
       state: {
         orderNumber,
         total: totalPrice,
-        itemsCount: items.reduce((s, i) => s + i.quantity, 0),
+        quantity,
         client: form,
       },
     });
     clearReservation();
   }
 
-  if (items.length === 0) {
+  if (quantity === 0) {
     return (
       <div className="section container reservation-empty">
-        <span className="eyebrow">Bon de réservation</span>
-        <h1>Votre bon est vide</h1>
-        <p>Ajoutez des produits depuis la boutique pour lancer une réservation.</p>
-        <Link to="/boutique" className="btn btn-primary">Voir la boutique</Link>
+        <span className="eyebrow">{dict.reservation.emptyEyebrow}</span>
+        <h1>{dict.reservation.emptyTitle}</h1>
+        <p>{dict.reservation.emptyText}</p>
+        <Link to="/" className="btn btn-primary">{dict.reservation.emptyCta}</Link>
       </div>
     );
   }
+
+  const t = dict.reservation;
 
   return (
     <div className="reservation section">
       <div className="container reservation__grid">
         <form className="reservation-form" onSubmit={handleSubmit} noValidate>
-          <span className="eyebrow">Étape finale</span>
-          <h1>Vos coordonnées de livraison</h1>
-          <p className="reservation-form__lead">
-            Ces informations servent uniquement à préparer et livrer votre
-            commande. Le paiement se fait en espèces, à la réception.
-          </p>
+          <span className="eyebrow">{t.eyebrow}</span>
+          <h1>{t.title}</h1>
+          <p className="reservation-form__lead">{t.lead}</p>
 
           <div className="field">
-            <label htmlFor="nom">Nom et prénom</label>
+            <label htmlFor="nom">{t.labels.nom}</label>
             <input
               id="nom"
               type="text"
               value={form.nom}
               onChange={(e) => update("nom", e.target.value)}
-              placeholder="Djamal Benali"
+              placeholder={t.placeholders.nom}
             />
             {errors.nom && <span className="field__error">{errors.nom}</span>}
           </div>
 
           <div className="field-row">
             <div className="field">
-              <label htmlFor="telephone">Téléphone</label>
+              <label htmlFor="telephone">{t.labels.telephone}</label>
               <input
                 id="telephone"
                 type="tel"
                 value={form.telephone}
                 onChange={(e) => update("telephone", e.target.value)}
-                placeholder="0555 12 34 56"
+                placeholder={t.placeholders.telephone}
               />
               {errors.telephone && <span className="field__error">{errors.telephone}</span>}
             </div>
 
             <div className="field">
-              <label htmlFor="wilaya">Wilaya</label>
+              <label htmlFor="wilaya">{t.labels.wilaya}</label>
               <select
                 id="wilaya"
                 value={form.wilaya}
                 onChange={(e) => update("wilaya", e.target.value)}
               >
-                <option value="">Sélectionner…</option>
-                {wilayas.map((w) => (
-                  <option key={w} value={w}>{w}</option>
+                <option value="">{t.placeholders.wilaya}</option>
+                {wilayaOptions.map((w) => (
+                  <option key={w.value} value={w.value}>{w.label}</option>
                 ))}
               </select>
               {errors.wilaya && <span className="field__error">{errors.wilaya}</span>}
@@ -116,48 +120,46 @@ export default function Reservation() {
           </div>
 
           <div className="field">
-            <label htmlFor="adresse">Adresse / commune</label>
+            <label htmlFor="adresse">{t.labels.adresse}</label>
             <input
               id="adresse"
               type="text"
               value={form.adresse}
               onChange={(e) => update("adresse", e.target.value)}
-              placeholder="Cité, rue, repère..."
+              placeholder={t.placeholders.adresse}
             />
             {errors.adresse && <span className="field__error">{errors.adresse}</span>}
           </div>
 
           <div className="field">
-            <label htmlFor="note">Note pour le livreur (optionnel)</label>
+            <label htmlFor="note">{t.labels.note}</label>
             <textarea
               id="note"
               rows="3"
               value={form.note}
               onChange={(e) => update("note", e.target.value)}
-              placeholder="Étage, horaires de disponibilité..."
+              placeholder={t.placeholders.note}
             />
           </div>
 
           <button type="submit" className="btn btn-primary reservation-form__submit">
-            Confirmer ma réservation — {formatPrice(totalPrice)}
+            {t.submit(dict.currency(totalPrice))}
           </button>
         </form>
 
         <aside className="reservation-summary">
-          <span className="eyebrow">Récapitulatif</span>
-          <h3>Votre bon</h3>
+          <span className="eyebrow">{t.summaryEyebrow}</span>
+          <h3>{t.summaryTitle}</h3>
           <ul>
-            {items.map((item) => (
-              <li key={item.id}>
-                <span>{item.quantity} × {item.name}</span>
-                <span>{formatPrice(item.price * item.quantity)}</span>
-              </li>
-            ))}
+            <li>
+              <span>{quantity} × {product.name}</span>
+              <span>{dict.currency(totalPrice)}</span>
+            </li>
           </ul>
           <div className="ticket-perforation" />
           <div className="reservation-summary__total">
-            <span>Total à la livraison</span>
-            <strong>{formatPrice(totalPrice)}</strong>
+            <span>{t.summaryTotal}</span>
+            <strong>{dict.currency(totalPrice)}</strong>
           </div>
         </aside>
       </div>

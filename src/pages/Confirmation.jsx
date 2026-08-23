@@ -1,17 +1,17 @@
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 import CodStamp from "../components/CodStamp";
 import "./Confirmation.css";
 
-function formatPrice(value) {
-  return new Intl.NumberFormat("fr-DZ").format(value) + " DA";
-}
-
 export default function Confirmation() {
   const { state } = useLocation();
+  const { dict } = useLanguage();
 
   if (!state) return <Navigate to="/" replace />;
 
-  const { orderNumber, total, itemsCount, client } = state;
+  const { orderNumber, total, quantity, client } = state;
+  const t = dict.confirmation;
 
   return (
     <div className="confirmation section">
@@ -19,32 +19,30 @@ export default function Confirmation() {
         <div className="receipt">
           <div className="receipt__perfo receipt__perfo--top" />
           <div className="receipt__body">
-            <span className="eyebrow">Réservation confirmée</span>
-            <h1>Merci, {client.nom.split(" ")[0]} !</h1>
+            <span className="eyebrow">{t.eyebrow}</span>
+            <h1>{t.greeting(client.nom.split(" ")[0])}</h1>
             <p className="receipt__lead">
-              Votre bon de réservation <strong>{orderNumber}</strong> est
-              enregistré. Notre équipe vous contacte au{" "}
-              <strong>{client.telephone}</strong> pour organiser la livraison.
+              {t.lead(orderNumber, client.telephone)}
             </p>
 
             <div className="receipt__row">
-              <span>Articles réservés</span>
-              <span>{itemsCount}</span>
+              <span>RoadSafe Emergency Kit</span>
+              <span>× {quantity}</span>
             </div>
             <div className="receipt__row">
-              <span>Wilaya</span>
+              <span>{t.wilayaLabel}</span>
               <span>{client.wilaya}</span>
             </div>
             <div className="receipt__row">
-              <span>Adresse</span>
+              <span>{t.adresseLabel}</span>
               <span>{client.adresse}</span>
             </div>
 
             <div className="receipt__divider" />
 
             <div className="receipt__total">
-              <span>Total à payer à la livraison</span>
-              <strong>{formatPrice(total)}</strong>
+              <span>{t.totalLabel}</span>
+              <strong>{dict.currency(total)}</strong>
             </div>
 
             <div className="receipt__stamp">
@@ -55,8 +53,8 @@ export default function Confirmation() {
         </div>
 
         <div className="confirmation__actions">
-          <Link to="/boutique" className="btn btn-outline">Continuer mes achats</Link>
-          <Link to="/" className="btn btn-primary">Retour à l'accueil</Link>
+          <Link to="/" className="btn btn-outline">{t.continueBtn}</Link>
+          <Link to="/" className="btn btn-primary">{t.homeBtn}</Link>
         </div>
       </div>
     </div>

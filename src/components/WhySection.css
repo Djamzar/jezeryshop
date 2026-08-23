@@ -1,0 +1,95 @@
+.why {
+  padding: 90px 0;
+}
+
+.why__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.why__copy h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  margin-top: 10px;
+  max-width: 420px;
+}
+
+.why__copy p {
+  margin-top: 20px;
+  max-width: 420px;
+  font-size: 1rem;
+}
+
+.why__compare {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.why__card {
+  flex: 1;
+  border-radius: var(--radius-m);
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow-card);
+}
+
+.why__card--risk {
+  background: #fdeceb;
+  border: 1.5px solid #f2c6c2;
+}
+
+.why__card--safe {
+  background: var(--vert-nuit);
+  color: white;
+}
+
+.why__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.why__card--risk .why__label {
+  color: var(--rouge-algerie);
+}
+
+.why__card--safe .why__label {
+  color: #9fd6b8;
+}
+
+.why__amount {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+}
+
+.why__card--risk .why__amount {
+  color: var(--rouge-algerie);
+}
+
+.why__sub {
+  font-size: 0.82rem;
+  opacity: 0.85;
+}
+
+.why__vs {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--gris-texte);
+}
+
+@media (max-width: 900px) {
+  .why__grid {
+    grid-template-columns: 1fr;
+  }
+  .why__compare {
+    flex-direction: column;
+  }
+  .why__card {
+    width: 100%;
+  }
+}

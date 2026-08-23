@@ -1,29 +1,15 @@
+import { useLanguage } from "../context/LanguageContext";
 import "./HowItWorks.css";
 
-const steps = [
-  {
-    n: "01",
-    title: "Choisissez vos articles",
-    text: "Parcourez le catalogue et ajoutez les produits voulus à votre bon de réservation, avec la quantité de votre choix.",
-  },
-  {
-    n: "02",
-    title: "Confirmez votre réservation",
-    text: "Renseignez vos coordonnées et votre wilaya. Aucune information bancaire n'est demandée.",
-  },
-  {
-    n: "03",
-    title: "Payez à la livraison",
-    text: "Notre livreur vous contacte, vous vérifiez votre commande et réglez en espèces à la réception.",
-  },
-];
-
 export default function HowItWorks() {
+  const { dict } = useLanguage();
+  const steps = dict.how.steps;
+
   return (
     <section className="how" id="comment-ca-marche">
       <div className="container">
-        <span className="eyebrow">Le déroulé</span>
-        <h2 className="how__title">Comment ça marche</h2>
+        <span className="eyebrow">{dict.how.eyebrow}</span>
+        <h2 className="how__title">{dict.how.title}</h2>
 
         <div className="how__steps">
           {steps.map((step, i) => (
