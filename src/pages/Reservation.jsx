@@ -5,6 +5,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { product } from "../data/product";
 import { wilayas } from "../data/wilayas";
 import { wilayasAr } from "../data/wilayasAr";
+import { createReservation } from "../api/reservations";
 import "./Reservation.css";
 
 export default function Reservation() {
@@ -19,6 +20,8 @@ export default function Reservation() {
     note: "",
   });
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const wilayaOptions = wilayas.map((w, i) => ({
     value: w,
@@ -40,21 +43,30 @@ export default function Reservation() {
     return Object.keys(next).length === 0;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (quantity === 0) return;
     if (!validate()) return;
 
-    const orderNumber = `JZ-${Date.now().toString().slice(-6)}`;
-    navigate("/confirmation", {
-      state: {
-        orderNumber,
-        total: totalPrice,
-        quantity,
-        client: form,
-      },
-    });
-    clearReservation();
+    setSubmitError("");
+    setSubmitting(true);
+
+    try {
+      const result = await createReservation({ quantity, client: form });
+      navigate("/confirmation", {
+        state: {
+          orderNumber: result.orderNumber,
+          total: result.total,
+          quantity: result.quantity,
+          client: form,
+        },
+      });
+      clearReservation();
+    } catch (err) {
+      setSubmitError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (quantity === 0) {
@@ -142,9 +154,16 @@ export default function Reservation() {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary reservation-form__submit">
-            {t.submit(dict.currency(totalPrice))}
+          <button
+            type="submit"
+            className="btn btn-primary reservation-form__submit"
+            disabled={submitting}
+          >
+            {submitting ? "Envoi en cours…" : t.submit(dict.currency(totalPrice))}
           </button>
+          {submitError && (
+            <p className="field__error reservation-form__submit-error">{submitError}</p>
+          )}
         </form>
 
         <aside className="reservation-summary">

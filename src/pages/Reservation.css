@@ -75,6 +75,11 @@
   font-size: 1rem;
 }
 
+.reservation-form__submit-error {
+  margin-top: 12px;
+  text-align: center;
+}
+
 .reservation-summary {
   background: var(--blanc);
   border-radius: var(--radius-m);
